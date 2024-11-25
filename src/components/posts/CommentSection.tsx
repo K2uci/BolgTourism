@@ -1,30 +1,50 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../lib/store';
 import { createComment } from '../../lib/api';
 import { useQueryClient } from 'react-query';
-import toast from 'react-hot-toast';
+import { CommentTypes } from '../../types/CommentsTypes';
+import { Toaster, toast } from 'react-hot-toast';
 
-export default function CommentSection({ postId, comments }: { postId: string; comments: any[] }) {
+interface LocationState {
+  params: CommentTypes[];
+  postid: number
+}
+
+export default function CommentSection() {
+  const navigation = useNavigate();
+  const location = useLocation();
+  const { params , postid } = location.state as LocationState || { params: [] };
   const { register, handleSubmit, reset } = useForm();
   const user = useAuthStore((state) => state.user);
   const queryClient = useQueryClient();
 
   const onSubmit = async (data: any) => {
     try {
-      await createComment(postId, data.content);
-      queryClient.invalidateQueries(['post', postId]);
+      await createComment(postid, user.id, data.content);
+      queryClient.invalidateQueries(['post', postid]);
       reset();
-      toast.success('Comment added successfully!');
+      toast.success('Comment added successfully!', { duration: 3000 });
+      setTimeout(() => {
+        navigation('/');
+      }, 3500);
     } catch (error) {
       toast.error('Failed to add comment');
     }
   };
-
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    };
+    return new Date(dateString).toLocaleDateString('es-ES', options);
+  };
   return (
     <div className="space-y-6">
+      <Toaster />
       <h3 className="text-xl font-semibold">Comments</h3>
-      
       {user ? (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <textarea
@@ -45,12 +65,12 @@ export default function CommentSection({ postId, comments }: { postId: string; c
       )}
 
       <div className="space-y-4">
-        {comments.map((comment) => (
-          <div key={comment.id} className="bg-gray-50 p-4 rounded-lg">
+        {params.map((comment) => (
+          <div key={comment.id} className="bg-gray-50 p-4 rounded-lg" >
             <div className="flex items-center justify-between mb-2">
-              <span className="font-medium">{comment.author.name}</span>
+              <span className="font-medium">{comment.authorid}</span>
               <span className="text-sm text-gray-500">
-                {new Date(comment.createdAt).toLocaleDateString()}
+                {formatDate(comment.createdat)}
               </span>
             </div>
             <p className="text-gray-700">{comment.content}</p>

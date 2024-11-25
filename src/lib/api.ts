@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { StatusUserTypes } from '../types/StatusUserTypes';
 import { useAuthStore } from './store';
 
 const api = axios.create({
@@ -13,9 +14,24 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export const loginUser = async (email: string, password: string) => {
-  const response = await api.post('/auth/login', { email, password });
-  return response.data;
+export const loginUser = async (email: string, password: string): Promise<StatusUserTypes | null> => {
+  try {
+    const response = await fetch('http://localhost:3000/users/loggin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    if (!response.ok) {
+      return null;
+    }
+    const data: StatusUserTypes = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error during login:', error);
+    return null;
+  }
 };
 
 export const registerUser = async (name: string, email: string, password: string) => {
@@ -23,24 +39,39 @@ export const registerUser = async (name: string, email: string, password: string
   return response.data;
 };
 
-export const getPosts = async () => {
-  const response = await api.get('/posts');
-  return response.data;
+export const getPost = async (id: number) => {
+  const response = await fetch(`http://localhost:3000/post/loadOneBy/${id}`)
+    .then(res => res.json())
+    .then(data => {
+      return data
+    })
+  return response;
 };
 
-export const getPost = async (id: string) => {
-  const response = await api.get(`/posts/${id}`);
-  return response.data;
-};
-
-export const createComment = async (postId: string, content: string) => {
-  const response = await api.post(`/posts/${postId}/comments`, { content });
-  return response.data;
+export const createComment = async (postId: number, userId: number, content: string) => {
+  try {
+    const response = await fetch(`http://localhost:3000/comment/createCommet/${postId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: userId, content: content }),
+    });
+    if (!response.ok) {
+      return null;
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+  }
 };
 
 export const getDestinations = async () => {
-  const response = await api.get('/destinations');
-  return response.data;
+  const response = await fetch('http://localhost:3000/destination/loadAllDestinations')
+    .then(res => res.json())
+    .then(data => {
+      return data
+    })
+  return response;
 };
 
 export const searchPosts = async (query: string) => {

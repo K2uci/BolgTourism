@@ -24,14 +24,14 @@ export default function Hero() {
                 Expert travel guides and insider tips for your next adventure
               </p>
               <div className="flex space-x-4">
-                <button 
+                <button
                   onClick={() => setShowExploreTours(true)}
                   className="bg-[#00BCD4] hover:bg-[#00ACC1] text-white px-8 py-3 rounded-full font-medium flex items-center"
                 >
                   Explore Now
                   <ArrowRight className="ml-2" size={20} />
                 </button>
-                <button 
+                <button
                   onClick={() => setShowTourRoutes(true)}
                   className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white hover:text-gray-900 transition-colors"
                 >
@@ -42,7 +42,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
       {showTourRoutes && <TourRoutesModal onClose={() => setShowTourRoutes(false)} />}
       {showExploreTours && <ExploreToursModal onClose={() => setShowExploreTours(false)} />}
     </>

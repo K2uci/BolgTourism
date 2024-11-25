@@ -1,19 +1,16 @@
-import express from 'express';
-import cors from 'cors';
+const app = require('./src/app')
 import { PrismaClient } from '@prisma/client';
-import authRoutes from './routes/auth';
-import postRoutes from './routes/posts';
-import destinationRoutes from './routes/destinations';
+// import authRoutes from './routes/auth';
+// import postRoutes from './routes/posts';
+// import destinationRoutes from './routes/destinations';
 
-const prisma = new PrismaClient();
-const app = express();
+// const prisma = new PrismaClient();
 
-app.use(cors());
-app.use(express.json());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/posts', postRoutes);
-app.use('/api/destinations', destinationRoutes);
+
+// app.use('/api/auth', authRoutes);
+// app.use('/api/posts', postRoutes);
+// app.use('/api/destinations', destinationRoutes);
 
 const PORT = process.env.PORT || 3000;
 

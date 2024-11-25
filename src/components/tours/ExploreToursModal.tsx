@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MapPin, Users, Calendar, DollarSign } from 'lucide-react';
 
 const tours = [

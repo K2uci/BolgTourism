@@ -9,7 +9,7 @@ export default function DestinationsModal({ onClose }: { onClose: () => void }) 
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-8 max-w-6xl w-full max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Popular Destinations</h2>
+          <h2 className="text-2xl font-bold" onClick={()=>console.log(destinations)}>Popular Destinations</h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
@@ -28,7 +28,8 @@ export default function DestinationsModal({ onClose }: { onClose: () => void }) 
                 className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow"
               >
                 <img
-                  src={destination.image}
+                  // src={destination.image}
+                  src='https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=2938&auto=format&fit =crop'
                   alt={destination.name}
                   className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
